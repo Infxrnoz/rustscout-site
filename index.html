@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RustScout · Rust+ on your desktop</title>
-<meta name="description" content="RustScout is a Rust+ companion for Windows: live map, team tracker, raid alerts, Discord alerts, raid calculator, in-game HUD and custom crosshair.">
+<meta name="description" content="RustScout is a Rust+ companion for Windows: live map, team tracker, raid alerts, Discord alerts, raid calculator, in-game HUD, custom crosshair and colour profiles.">
 <meta property="og:title" content="RustScout · Rust+ on your desktop">
 <meta property="og:description" content="Live map, team tracker, alerts, raid calculator and an in-game overlay, without having your phone out mid-raid.">
 <meta property="og:image" content="https://rust-scout.app/assets/map.webp">
@@ -175,7 +175,7 @@ footer p { margin: 0 0 8px; }
             <div class="card"><div class="ico">🔎</div><h3>Server browser</h3><p>Population, wipe dates and a full map preview of any server before you join.</p></div>
             <div class="card"><div class="ico">⏱</div><h3>Pins and decay timers</h3><p>Mark your base and stashes, and get warned before your walls start decaying.</p></div>
             <div class="card"><div class="ico">🧮</div><h3>Calculators</h3><p>Raid costs, crafting, recycling, power circuits and gene breeding.</p></div>
-            <div class="card"><div class="ico">🌙</div><h3>Night vision</h3><p>Brighten your screen at night with one hotkey, and turn it off with another.</p></div>
+            <div class="card"><div class="ico">📂</div><h3>Map files</h3><p>Open any .map file to see monuments, recyclers, ore and junkpile hotspots before you play.</p></div>
         </div>
 
         <div class="show">
@@ -214,8 +214,9 @@ footer p { margin: 0 0 8px; }
         <div class="show flip">
             <div class="text">
                 <div class="kicker">See more</div>
-                <h3>Colour profile <span class="pro-tag">PRO</span></h3>
-                <p>Vibrance, saturation, brightness, contrast, gamma and temperature, with presets for night, snow and desert. Toggle it with a hotkey, and everything goes back to normal when you close the app.</p>
+                <h3>Colour profiles <span class="pro-tag">PRO</span></h3>
+                <p>Make your own profiles with vibrance, saturation, brightness, contrast, gamma and temperature, or start from the night, snow and desert presets.</p>
+                <p>One hotkey switches between them in game, and everything goes back to normal when you close the app.</p>
             </div>
             <img src="assets/color.webp" width="1424" height="861" alt="Colour profile sliders and presets" loading="lazy">
         </div>
@@ -255,7 +256,6 @@ footer p { margin: 0 0 8px; }
                     <li>Team chat and Discord bot commands</li>
                     <li>Threats, server browser and map files</li>
                     <li>Pins, decay timers and every calculator</li>
-                    <li>Night vision</li>
                 </ul>
                 <a class="btn ghost" data-download href="#download" style="width:100%">Download</a>
             </div>
@@ -266,7 +266,7 @@ footer p { margin: 0 0 8px; }
                     <li>Everything in Free</li>
                     <li>In-game HUD and app over the game</li>
                     <li>Custom crosshair</li>
-                    <li>Colour profile with vibrance and presets</li>
+                    <li>Your own colour profiles, switched with a hotkey</li>
                     <li>Themes, backgrounds and fonts</li>
                 </ul>
                 <a class="btn primary" data-buy href="#" style="width:100%">Get Pro</a>
@@ -289,8 +289,7 @@ footer p { margin: 0 0 8px; }
             <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>M</kbd></td><td>Open RustScout over the game, press again to go back <span class="pro-tag">PRO</span></td></tr>
             <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>O</kbd></td><td>Show or hide the HUD <span class="pro-tag">PRO</span></td></tr>
             <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>X</kbd></td><td>Show or hide your crosshair <span class="pro-tag">PRO</span></td></tr>
-            <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>V</kbd></td><td>Colour profile on or off <span class="pro-tag">PRO</span></td></tr>
-            <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>G</kbd> / <kbd>H</kbd></td><td>Night vision brighter / off</td></tr>
+            <tr><td><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>V</kbd></td><td>Next colour profile, then off after the last one <span class="pro-tag">PRO</span></td></tr>
         </table>
         <p class="note">If another program already uses one of these, RustScout picks a free one and shows it in the tray menu and Settings.</p>
     </div>
@@ -301,7 +300,7 @@ footer p { margin: 0 0 8px; }
         <div class="kicker">FAQ</div>
         <h2>Questions</h2>
         <div class="faq">
-            <details><summary>Does it touch the game?</summary><p>No. RustScout talks to Rust+, the same service the official Rust+ phone app uses, and draws its overlay in its own separate window. It doesn't read or change Rust's memory or files. Night vision and the colour profile change your display settings, like the NVIDIA Control Panel does.</p></details>
+            <details><summary>Does it touch the game?</summary><p>No. RustScout talks to Rust+, the same service the official Rust+ phone app uses, and draws its overlay in its own separate window. It doesn't read or change Rust's memory or files. Colour profiles change your display settings, like the NVIDIA Control Panel does.</p></details>
             <details><summary>Is it allowed on every server?</summary><p>Rust+ works on any server that has it turned on. Some community servers don't allow crosshair overlays or gamma changes, so check the rules of the server you play on.</p></details>
             <details><summary>Why does it say "not answering Rust+"?</summary><p>That server's Rust+ is down or its Rust+ port is blocked. It's on the server's side, and RustScout reconnects by itself once it's back. Telling the server admins usually gets it fixed.</p></details>
             <details><summary>Does the overlay work in fullscreen?</summary><p>Use Borderless or Windowed mode in Rust's settings. Exclusive fullscreen draws over everything, including overlays.</p></details>
