@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RustScout Pro · Everything Rust+ can't do on its own</title>
+<meta name="description" content="RustScout Pro adds killer intel, stretched 4:3 and display control, colour profiles, a custom crosshair and HUD, raid and decay tools, Discord alerts and full customisation.">
+<meta property="og:title" content="RustScout Pro">
+<meta property="og:description" content="Killer intel, stretched 4:3, colour profiles, crosshair, raid tools, Discord alerts and full customisation.">
+<meta property="og:image" content="https://rust-scout.app/assets/pro/threats.webp">
+<meta property="og:url" content="https://rust-scout.app/pro/">
+<meta name="theme-color" content="#0b0b0c">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" type="image/png" href="../assets/icon.png">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+:root {
+    --bg: #0b0b0c; --bg-2: #111113; --panel: #141416; --panel-2: #1b1b1e; --line: #29292e; --line-2: #37373d;
+    --text: #ece7df; --muted: #9a958e; --accent: #e0442f; --accent-2: #ff7a2f; --gold: #f0c23c; --good: #7fd04a; --blue: #3fa9f5;
+    --font: "Inter", "Segoe UI", system-ui, sans-serif; --display: "Rajdhani", "Inter", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); overflow-x: hidden; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-family: var(--display); letter-spacing: .04em; line-height: 1.05; margin: 0; text-transform: uppercase; }
+em { font-style: normal; }
+.kicker { font: 700 13px var(--display); letter-spacing: .22em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 12px; }
+.muted { color: var(--muted); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; border-radius: 4px; }
+
+nav { position: sticky; top: 0; z-index: 20; background: rgba(11, 11, 12, .8); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+nav .wrap { height: 60px; display: flex; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 20px var(--display); letter-spacing: .14em; text-decoration: none; }
+.brand img { width: 26px; height: 26px; }
+.brand em { color: var(--accent); }
+.links { display: flex; gap: 22px; margin-left: auto; font-size: 14px; color: var(--muted); }
+.links a { text-decoration: none; }
+.links a:hover, .links a.on { color: var(--text); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 26px; border-radius: 10px; border: 1px solid transparent;
+    font: 700 16px var(--display); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: transform .15s, box-shadow .2s; }
+.btn.primary { color: #fff; background: linear-gradient(135deg, #ff7a2f, #e0442f 55%, #b82a1b); box-shadow: 0 10px 34px rgba(224, 68, 47, .4), inset 0 1px 0 rgba(255, 255, 255, .2); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px rgba(224, 68, 47, .55); }
+.btn.ghost { border-color: var(--line-2); background: rgba(255, 255, 255, .03); }
+.btn.ghost:hover { border-color: var(--accent); }
+.btn.small { height: 38px; padding: 0 16px; font-size: 14px; }
+.btn[aria-disabled="true"] { opacity: .6; pointer-events: none; }
+
+/* hero */
+.hero { position: relative; padding: 90px 0 40px; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -30% -10% auto; height: 900px; pointer-events: none;
+    background: radial-gradient(40% 50% at 30% 30%, rgba(224, 68, 47, .28), transparent 70%), radial-gradient(35% 40% at 75% 20%, rgba(240, 194, 60, .14), transparent 70%); }
+.hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+    background-image: linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+    background-size: 46px 46px; mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 70%); }
+.hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(240, 194, 60, .45);
+    background: rgba(240, 194, 60, .08); color: var(--gold); font: 700 13px var(--display); letter-spacing: .2em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(52px, 8vw, 96px); margin: 18px 0 14px; letter-spacing: .06em; }
+.hero h1 em { background: linear-gradient(120deg, #ffb36b, #ff5a36 45%, #f0c23c); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 30px rgba(224, 68, 47, .45)); }
+.hero p.lead { font-size: 19px; color: var(--muted); max-width: 540px; margin: 0 0 28px; }
+.price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 22px; }
+.price b { font: 700 46px var(--display); }
+.price span { color: var(--muted); font-size: 15px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.trust { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 22px; color: var(--muted); font-size: 14px; }
+.trust span::before { content: "✓ "; color: var(--good); font-weight: 700; }
+
+.stack { position: relative; height: 560px; }
+.stack img { position: absolute; width: 270px; border-radius: 16px; border: 1px solid var(--line-2); box-shadow: 0 30px 70px rgba(0, 0, 0, .65), 0 0 0 1px rgba(255, 255, 255, .03); transition: transform .4s; }
+.stack img:nth-child(1) { left: 0; top: 60px; transform: rotate(-9deg); }
+.stack img:nth-child(2) { left: 50%; top: 0; transform: translateX(-50%); z-index: 2; box-shadow: 0 30px 80px rgba(0, 0, 0, .7), 0 0 60px rgba(224, 68, 47, .35); }
+.stack img:nth-child(3) { right: 0; top: 70px; transform: rotate(9deg); }
+.stack:hover img:nth-child(1) { transform: rotate(-12deg) translateX(-14px); }
+.stack:hover img:nth-child(3) { transform: rotate(12deg) translateX(14px); }
+
+/* stats strip */
+.strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(90deg, rgba(224, 68, 47, .06), transparent 40%, rgba(240, 194, 60, .05)); }
+.strip .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+.strip div { padding: 26px 10px; text-align: center; border-right: 1px solid var(--line); }
+.strip div:last-child { border-right: 0; }
+.strip b { display: block; font: 700 36px var(--display); color: var(--text); }
+.strip span { color: var(--muted); font-size: 14px; }
+
+/* feature rows */
+section { padding: 100px 0; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.row + .row { margin-top: 130px; }
+.row.flip .copy { order: 2; }
+.copy h2 { font-size: clamp(34px, 4.4vw, 52px); margin-bottom: 16px; }
+.copy h2 em { color: var(--accent); text-shadow: 0 0 30px rgba(224, 68, 47, .4); }
+.copy p { color: var(--muted); margin: 0 0 16px; font-size: 17px; }
+.points { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; }
+.points li { position: relative; padding-left: 30px; }
+.points li::before { content: ""; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border-radius: 50%;
+    background: radial-gradient(circle, #fff 0 22%, var(--accent) 28% 100%); box-shadow: 0 0 12px rgba(224, 68, 47, .6); }
+.copy .note { font-size: 13px; color: var(--muted); margin: 18px 0 0; }
+
+.shot { position: relative; display: flex; justify-content: center; }
+.shot::before { content: ""; position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; background: radial-gradient(circle, rgba(224, 68, 47, .35), transparent 70%); filter: blur(40px); }
+.shot img { position: relative; width: 340px; border-radius: 18px; border: 1px solid var(--line-2); box-shadow: 0 30px 80px rgba(0, 0, 0, .65); }
+.shot.wide img { width: 100%; }
+.shot .duo { position: relative; display: flex; gap: 18px; align-items: flex-start; }
+.shot .duo img { width: 260px; }
+.shot .duo img:last-child { margin-top: 60px; }
+.tag { position: absolute; z-index: 2; padding: 6px 12px; border-radius: 8px; background: rgba(11, 11, 12, .85); border: 1px solid var(--line-2);
+    font: 700 13px var(--display); letter-spacing: .12em; text-transform: uppercase; backdrop-filter: blur(6px); }
+.tag b { color: var(--accent-2); }
+
+/* discord mock */
+.discord { width: 100%; max-width: 480px; border-radius: 14px; background: #313338; border: 1px solid #3f4147; padding: 16px 18px; font-family: "Inter", sans-serif; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); position: relative; }
+.discord .who { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #f2f3f5; }
+.discord .who img { width: 38px; height: 38px; border-radius: 50%; }
+.discord .bot { background: #5865f2; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; }
+.discord .time { color: #949ba4; font-size: 12px; font-weight: 400; }
+.embed { margin: 8px 0 0 48px; border-left: 4px solid var(--c, #ff3b30); background: #2b2d31; border-radius: 4px; padding: 10px 14px; }
+.embed b { display: block; color: #f2f3f5; font-size: 15px; margin-bottom: 3px; }
+.embed span { color: #dbdee1; font-size: 14px; }
+.embed small { display: block; color: #949ba4; font-size: 11px; margin-top: 8px; }
+.embed + .embed { margin-top: 8px; }
+
+/* compare */
+.compare { max-width: 900px; margin: 40px auto 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--panel); }
+.compare table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.compare th, .compare td { padding: 13px 18px; border-bottom: 1px solid var(--line); text-align: left; }
+.compare th { font: 700 15px var(--display); letter-spacing: .14em; text-transform: uppercase; background: var(--bg-2); }
+.compare th:not(:first-child), .compare td:not(:first-child) { text-align: center; width: 120px; }
+.compare th.pro { color: var(--gold); background: linear-gradient(180deg, rgba(240, 194, 60, .12), var(--bg-2)); }
+.compare td.pro { background: rgba(240, 194, 60, .04); }
+.compare tr:last-child td { border-bottom: 0; }
+.yes { color: var(--good); font-weight: 700; }
+.no { color: #55525c; }
+.compare .grp td { background: var(--bg-2); color: var(--accent-2); font: 700 12px var(--display); letter-spacing: .2em; text-transform: uppercase; padding: 9px 18px; }
+
+.center { text-align: center; }
+.center h2 { font-size: clamp(34px, 4.4vw, 52px); }
+.center p { color: var(--muted); max-width: 620px; margin: 14px auto 0; }
+
+.faq { max-width: 760px; margin: 30px auto 0; }
+details { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; padding: 18px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; }
+details[open] summary::after { content: "–"; }
+details p { margin: 0 0 18px; color: var(--muted); }
+
+.final { position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+.final::before { content: ""; position: absolute; inset: 0; background: radial-gradient(50% 80% at 50% 100%, rgba(224, 68, 47, .25), transparent 70%); }
+.final .wrap { position: relative; }
+
+footer { padding: 40px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .stack img, .btn { transition: none; } html { scroll-behavior: auto; } }
+
+@media (max-width: 900px) {
+    .links { display: none; }
+    .hero .wrap, .row { grid-template-columns: 1fr; gap: 40px; }
+    .row.flip .copy { order: 0; }
+    .stack { height: 420px; max-width: 420px; margin: 0 auto; width: 100%; }
+    .stack { overflow: hidden; padding: 10px 0; }
+    .stack img { width: 190px; }
+    .stack img:nth-child(1) { left: 4px; } .stack img:nth-child(3) { right: 4px; }
+    .strip .wrap { grid-template-columns: 1fr 1fr; }
+    .strip div:nth-child(2) { border-right: 0; }
+    .strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    section { padding: 70px 0; }
+    .row + .row { margin-top: 90px; }
+    .shot img { width: min(340px, 100%); }
+    .shot .duo img { width: 48%; }
+    .compare th, .compare td { padding: 11px 10px; font-size: 13px; }
+    .compare th:not(:first-child), .compare td:not(:first-child) { width: 64px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="wrap">
+        <a class="brand" href="../"><img src="../assets/icon.png" alt="">RUST<em>SCOUT</em></a>
+        <div class="links">
+            <a href="../#features">Features</a>
+            <a href="../#commands">Commands</a>
+            <a class="on" href="./">Pro</a>
+            <a href="#compare">Free vs Pro</a>
+            <a href="../#faq">FAQ</a>
+        </div>
+        <a class="btn primary small" data-buy href="#buy">Get Pro</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="wrap">
+        <div>
+            <span class="badge">★ RustScout Pro</span>
+            <h1>Play <em>smarter</em>.</h1>
+            <p class="lead">Free RustScout gives you everything Rust+ does. Pro adds what Rust+ can't: who's killing you, stretched 4:3, colour profiles, a custom crosshair, raid planning, Discord alerts, and an app you can make your own.</p>
+            <div class="price"><b data-price>Soon</b><span>one-time · no subscription</span></div>
+            <div class="cta">
+                <a class="btn primary" data-buy href="#buy">Get Pro</a>
+                <a class="btn ghost" href="#compare">Compare plans</a>
+            </div>
+            <div class="trust"><span>One-time payment</span><span>Works offline after activation</span><span>Never touches the game</span></div>
+        </div>
+        <div class="stack" aria-hidden="true">
+            <img src="../assets/pro/display.webp" alt="" width="525" height="1222">
+            <img src="../assets/pro/threats.webp" alt="" width="525" height="1222">
+            <img src="../assets/pro/colours.webp" alt="" width="525" height="1222">
+        </div>
+    </div>
+</header>
+
+<div class="strip">
+    <div class="wrap">
+        <div><b>10+</b><span>Pro features</span></div>
+        <div><b>34</b><span>layout toggles</span></div>
+        <div><b>1</b><span>payment, forever</span></div>
+        <div><b>0</b><span>game files touched</span></div>
+    </div>
+</div>
+
+<section>
+    <div class="wrap">
+        <div class="row reveal">
+            <div class="copy">
+                <div class="kicker">Killer intel</div>
+                <h2>Know <em>who</em> you're fighting.</h2>
+                <p>Free shows who killed you. Pro pulls their public Steam profile into a card, so you can spot the cheater, the alt account or the 6,000-hour zerg player before you go back for your loot.</p>
+                <ul class="points">
+                    <li>Account age, so you can spot brand-new alt accounts</li>
+                    <li>Total Rust hours, plus the last two weeks</li>
+                    <li>Past names, friend count and VAC or game bans</li>
+                    <li>Live status: in Rust, on Steam or offline</li>
+                </ul>
+                <p class="note">Players with private Steam profiles show what Steam allows. Screenshot uses example players.</p>
+            </div>
+            <div class="shot"><img src="../assets/pro/threats.webp" alt="Threats tab with killer cards showing account age, hours, names and friends" width="525" height="1222" loading="lazy"></div>
+        </div>
+
+        <div class="row flip reveal">
+            <div class="copy">
+                <div class="kicker">Display</div>
+                <h2>Stretched <em>4:3</em> in one click.</h2>
+                <p>Resolution, refresh rate, HDR and scaling for every monitor, in one tab. No digging through Windows settings or graphics drivers mid-wipe.</p>
+                <ul class="points">
+                    <li>1440×1080, 1280×960 and 1024×768 presets, stretched to fill the screen</li>
+                    <li>Every refresh rate your monitor supports, one click each</li>
+                    <li>Any custom resolution, plus HDR on or off</li>
+                    <li>15-second safety: if you don't click Keep, it switches back</li>
+                </ul>
+            </div>
+            <div class="shot"><img src="../assets/pro/display.webp" alt="Display tab with resolution, refresh rate buttons and stretched 4:3 presets" width="525" height="1222" loading="lazy"></div>
+        </div>
+
+        <div class="row reveal">
+            <div class="copy">
+                <div class="kicker">Colour profiles</div>
+                <h2>See <em>more</em> at night.</h2>
+                <p>NVIDIA digital vibrance, saturation, brightness, contrast, gamma and temperature, saved as your own profiles. One hotkey switches between them in game, and everything goes back to normal when you close the app.</p>
+                <ul class="points">
+                    <li>Night, Snow and Desert presets to start from</li>
+                    <li>As many of your own profiles as you want</li>
+                    <li><b>Ctrl + Alt + V</b> cycles through them in game</li>
+                </ul>
+            </div>
+            <div class="shot"><img src="../assets/pro/colours.webp" alt="Colour profiles with presets and sliders" width="525" height="1222" loading="lazy"></div>
+        </div>
+
+        <div class="row flip reveal">
+            <div class="copy">
+                <div class="kicker">In game</div>
+                <h2>Your crosshair. Your <em>HUD</em>.</h2>
+                <p>Design a crosshair that's actually visible on snow and in the dark, and pin a small HUD over the game with the clock, time to sunset, pop, your next decay timer and live alerts.</p>
+                <ul class="points">
+                    <li>Cross, T, circle or dot, with any size, gap, thickness and colour</li>
+                    <li>Click-through, so it never steals your mouse or keyboard</li>
+                    <li><b>Ctrl + Alt + M</b> puts the whole app over the game and back</li>
+                </ul>
+                <p class="note">Works with Rust in Borderless or Windowed mode. Some servers don't allow crosshair overlays, so check their rules.</p>
+            </div>
+            <div class="shot"><img src="../assets/pro/crosshair.webp" alt="Crosshair editor with style, size, gap, thickness and colour" width="525" height="1222" loading="lazy"></div>
+        </div>
+
+        <div class="row reveal">
+            <div class="copy">
+                <div class="kicker">Raid planning</div>
+                <h2>Know the <em>sulfur</em> before you go.</h2>
+                <p>Add walls, doors and deployables and see the cheapest or meta way through, with total sulfur and time to break. Your team can ask from team chat too.</p>
+                <ul class="points">
+                    <li>Raid, crafting, recycling, power and gene breeding calculators</li>
+                    <li><b>!raid stone wall 3</b> and <b>!craft</b> right in team chat</li>
+                    <li><b>!decay 250</b> pins a countdown to when a wall falls</li>
+                </ul>
+            </div>
+            <div class="shot"><img src="../assets/pro/raid.webp" alt="Raid calculator showing 61,200 sulfur for a base" width="525" height="1222" loading="lazy"></div>
+        </div>
+
+        <div class="row flip reveal">
+            <div class="copy">
+                <div class="kicker">Discord</div>
+                <h2>Your team, <em>pinged</em>.</h2>
+                <p>Send RustScout's alerts straight to your team's Discord, or run a Discord bot your team can ask questions from their phones.</p>
+                <ul class="points">
+                    <li>Smart alarms, deaths, logins and low TC upkeep</li>
+                    <li>Choose exactly which alerts go to Discord</li>
+                    <li>Discord bot with commands like !pop, !timers and !tracked</li>
+                </ul>
+                <p class="note">Example of how alerts look in Discord.</p>
+            </div>
+            <div class="shot">
+                <div class="discord" role="img" aria-label="Example of RustScout alerts in a Discord channel">
+                    <div class="who"><img src="../assets/icon.png" alt="">RustScout <span class="bot">APP</span> <span class="time">Today at 21:14</span></div>
+                    <div class="embed" style="--c:#ff3b30"><b>Smart alarm</b><span>Base alarm triggered</span><small>Example server</small></div>
+                    <div class="embed" style="--c:#d8412f"><b>Teammate died</b><span>bush.wookie died at Launch Site (K9)</span><small>Example server</small></div>
+                    <div class="embed" style="--c:#e4a73a"><b>TC upkeep low</b><span>Main TC upkeep runs out in 52 minutes</span><small>Example server</small></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row reveal">
+            <div class="copy">
+                <div class="kicker">Make it yours</div>
+                <h2>Every pixel, <em>your call</em>.</h2>
+                <p>Themes, your own image, GIF or video background, glass panels and fonts. Then the Layout toggles let you switch off anything you don't use: top bar items, map controls, help text, animations, even whole tabs.</p>
+                <ul class="points">
+                    <li>8 themes, custom colours or a rainbow accent</li>
+                    <li>34 layout toggles, plus text size and panel width</li>
+                    <li>Server browser, map files and resource heatmaps included</li>
+                </ul>
+            </div>
+            <div class="shot"><div class="duo"><img src="../assets/pro/layout.webp" alt="Layout toggles for the top bar, map, panels, style and tabs" width="525" height="1222" loading="lazy"><img src="../assets/appearance.webp" alt="RustScout with a green theme and custom background" width="1424" height="861" loading="lazy" style="width:300px;border-radius:14px"></div></div>
+        </div>
+    </div>
+</section>
+
+<section id="compare" style="background:linear-gradient(180deg, transparent, rgba(255,255,255,.015));border-top:1px solid var(--line)">
+    <div class="wrap center reveal">
+        <div class="kicker">Free vs Pro</div>
+        <h2>Free is good. Pro is <em style="color:var(--gold)">complete</em>.</h2>
+        <p>Everything from Rust+ stays free forever. Pro adds RustScout's own tools on top.</p>
+        <div class="compare">
+            <table>
+                <thead><tr><th>Feature</th><th>Free</th><th class="pro">Pro</th></tr></thead>
+                <tbody>
+                    <tr class="grp"><td colspan="3">From Rust+</td></tr>
+                    <tr><td>Live map with your team</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Team tracker, team chat and smart devices</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Alarms, deaths, logins and TC upkeep alerts</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Who killed you, ranked</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Team chat commands (!pop, !time, !online…)</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+                    <tr class="grp"><td colspan="3">Pro tools</td></tr>
+                    <tr><td>Killer Steam stats (age, hours, names, bans)</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Resolution, refresh rate, HDR, stretched 4:3</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Colour profiles with a hotkey</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Custom crosshair and in-game HUD</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Raid, craft, recycle, power and breeding calculators</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Decay timers and map pins (!decay)</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Server browser, map files and heatmaps</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Tracked players</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Discord alerts and Discord bot</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                    <tr><td>Themes, backgrounds and 34 layout toggles</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="wrap reveal">
+        <div class="center"><div class="kicker">Questions</div><h2>Pro, explained</h2></div>
+        <div class="faq">
+            <details><summary>Is it a subscription?</summary><p>No. Pro is a one-time payment for a licence key, and future updates are included.</p></details>
+            <details><summary>How do I get my key?</summary><p>Your key shows up on screen right after you pay. In RustScout, go to <b>Settings → RustScout Pro</b>, paste it and click <b>Activate</b>.</p></details>
+            <details><summary>How many PCs can I use it on?</summary><p>One at a time. Got a new PC? Click <b>Remove key</b> on the old one, then activate it on the new one.</p></details>
+            <details><summary>Does it work offline?</summary><p>Yes. It needs internet once to activate, then Pro keeps working offline.</p></details>
+            <details><summary>Can I get banned?</summary><p>RustScout doesn't read or change the game, but some servers have rules about overlays, crosshairs or colour changes. You use it at your own risk. See the <a href="../terms.html">terms</a>.</p></details>
+            <details><summary>What if it doesn't work for me?</summary><p>Message us within 14 days of buying for a full refund.</p></details>
+        </div>
+    </div>
+</section>
+
+<section class="final" id="buy">
+    <div class="wrap center reveal">
+        <div class="kicker">RustScout Pro</div>
+        <h2>Ready for <em style="color:var(--accent)">next wipe</em>?</h2>
+        <p>One payment. Every Pro feature. Every future update.</p>
+        <div class="cta" style="justify-content:center;margin-top:26px">
+            <a class="btn primary" data-buy href="#buy">Get Pro · <span data-price>Soon</span></a>
+            <a class="btn ghost" href="../">Back to home</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap">
+        <span>© <span data-year></span> RustScout · <a href="../terms.html">Terms and privacy</a></span>
+        <span>RustScout is a fan-made project and isn't affiliated with or endorsed by Facepunch Studios.</span>
+    </div>
+</footer>
+
+<script>
+const BUY_URL = '';
+const PRICE = '';
+for (const a of document.querySelectorAll('[data-buy]')) {
+    if (BUY_URL) a.href = BUY_URL;
+    else { a.setAttribute('aria-disabled', 'true'); if (!a.querySelector('[data-price]')) a.textContent = 'Coming soon'; else a.textContent = 'Coming soon'; }
+}
+for (const el of document.querySelectorAll('[data-price]')) el.textContent = PRICE || 'Soon';
+for (const el of document.querySelectorAll('[data-year]')) el.textContent = new Date().getFullYear();
+const io = 'IntersectionObserver' in window && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+for (const el of document.querySelectorAll('.reveal')) io ? io.observe(el) : el.classList.add('in');
+</script>
+</body>
+</html>
