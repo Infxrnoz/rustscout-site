@@ -11,9 +11,9 @@
 <meta property="og:url" content="https://rust-scout.app/">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" type="image/png" href="assets/icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="assets/fonts.css">
 <style>
 :root {
     --bg: #0b0b0c; --bg-2: #111113; --panel: #141416; --panel-2: #1b1b1e; --line: #29292e; --line-2: #37373d;
@@ -129,6 +129,20 @@ footer p { margin: 0 0 8px; }
     section { padding: 64px 0; }
     td:first-child { white-space: normal; }
 }
+.compare { border-radius: 10px; overflow: hidden; border: 1px solid var(--line-2); box-shadow: 0 20px 50px rgba(0, 0, 0, .5); background: var(--panel); }
+.cmp-tabs { display: flex; gap: 6px; padding: 10px; border-bottom: 1px solid var(--line); }
+.cmp-tabs button { flex: 1; height: 34px; border-radius: 6px; border: 1px solid var(--line-2); background: var(--panel-2); color: var(--muted); font: 700 14px var(--display); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.cmp-tabs button.active { color: #fff; border-color: var(--accent); background: rgba(224, 68, 47, .15); }
+.cmp-view { position: relative; aspect-ratio: 16 / 9; background: #000; user-select: none; touch-action: pan-y; }
+.cmp-view canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cmp-view .before { clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0); }
+.cmp-line { position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 12px rgba(0, 0, 0, .6); pointer-events: none; }
+.cmp-line::after { content: "⟷"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #111; font-size: 18px; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
+.cmp-tag { position: absolute; top: 12px; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, .65); font: 700 13px var(--display); letter-spacing: .12em; text-transform: uppercase; pointer-events: none; }
+.cmp-tag.b { left: 12px; } .cmp-tag.a { right: 12px; color: var(--accent-2); }
+.cmp-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.cmp-note { margin: 0; padding: 10px 14px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid #ff7a2f; outline-offset: 3px; border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -156,7 +170,7 @@ footer p { margin: 0 0 8px; }
             <a class="btn primary" data-download href="#download">Download free</a>
             <a class="btn ghost" href="#pricing">See Pro</a>
         </div>
-        <p class="note">Windows 10 and 11 · Free forever for the core app</p>
+        <p class="note">Windows 10 and 11 · The core app is free</p>
         <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="assets/map.webp" width="1424" height="861" alt="RustScout showing a server's map with the server browser open"></div>
     </div>
 </header>
@@ -218,7 +232,18 @@ footer p { margin: 0 0 8px; }
                 <p>Make your own profiles with vibrance, saturation, brightness, contrast, gamma and temperature, or start from the night, snow and desert presets.</p>
                 <p>One hotkey switches between them in game, and everything goes back to normal when you close the app.</p>
             </div>
-            <img src="assets/color.webp" width="1424" height="861" alt="Colour profile sliders and presets" loading="lazy">
+            <img id="compare-fallback" src="assets/color.webp" width="1424" height="861" alt="Colour profile sliders and presets" loading="lazy">
+            <div class="compare" id="compare" hidden>
+                <div class="cmp-tabs"><button data-p="Night" class="active">Night</button><button data-p="Snow">Snow</button><button data-p="Desert">Desert</button></div>
+                <div class="cmp-view">
+                    <canvas class="after" aria-hidden="true"></canvas>
+                    <canvas class="before" aria-hidden="true"></canvas>
+                    <span class="cmp-tag b">Before</span><span class="cmp-tag a">After</span>
+                    <div class="cmp-line"></div>
+                    <input class="cmp-range" type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+                </div>
+                <p class="cmp-note" id="cmp-note"></p>
+            </div>
         </div>
     </div>
 </section>
@@ -304,7 +329,7 @@ footer p { margin: 0 0 8px; }
             <details><summary>Is it allowed on every server?</summary><p>Rust+ works on any server that has it turned on. Some community servers don't allow crosshair overlays or gamma changes, so check the rules of the server you play on.</p></details>
             <details><summary>Why does it say "not answering Rust+"?</summary><p>That server's Rust+ is down or its Rust+ port is blocked. It's on the server's side, and RustScout reconnects by itself once it's back. Telling the server admins usually gets it fixed.</p></details>
             <details><summary>Does the overlay work in fullscreen?</summary><p>Use Borderless or Windowed mode in Rust's settings. Exclusive fullscreen draws over everything, including overlays.</p></details>
-            <details><summary>How many PCs can I use Pro on?</summary><p>Your key is for you. Use it on your own PCs, and don't share it.</p></details>
+            <details><summary>How many PCs can I use Pro on?</summary><p>One at a time. Each key activates on one PC. Got a new PC? Click <b>Remove key</b> in the app on the old one, then activate it on the new one.</p></details>
             <details><summary>I lost my licence key</summary><p>Message us with the email you paid with and we'll send it again.</p></details>
             <details><summary>Where are shops, heli, cargo and other events?</summary><p>On 6 August 2026 Facepunch removed shops (vending machines) and map events (patrol heli, cargo ship, Chinook, locked crates, explosions, the travelling vendor, oil rigs and airdrops) from Rust+. No companion app can see them anymore, so RustScout doesn't have shop search, sulfur tracking, event timers, event alerts or the chat commands for them. If Facepunch brings that data back, those features come back too.</p></details>
             <details><summary>Mac or Linux?</summary><p>Windows only for now.</p></details>
@@ -330,6 +355,57 @@ footer p { margin: 0 0 8px; }
 </footer>
 
 <script>
+const PROFILES = {
+    Night: { img: 'assets/cmp-night.webp', vib: 65, sat: 100, bri: 54, con: 50, gam: 1.6, temp: -10 },
+    Snow: { img: 'assets/cmp-snow.webp', vib: 60, sat: 105, bri: 46, con: 56, gam: 0.95, temp: 10 },
+    Desert: { img: 'assets/cmp-desert.webp', vib: 75, sat: 115, bri: 48, con: 55, gam: 1, temp: -15 }
+};
+(() => {
+    const box = document.getElementById('compare');
+    if (!box) return;
+    const view = box.querySelector('.cmp-view'), before = box.querySelector('.before'), after = box.querySelector('.after');
+    const cache = {};
+    function grade(p, src, dst) {
+        const t = p.temp / 100, tg = t >= 0 ? [1, 1 - 0.1 * t, 1 - 0.25 * t] : [1 + 0.25 * t, 1 + 0.1 * t, 1];
+        const k = 1 + (p.con - 50) / 100, b = (p.bri - 50) / 100, sat = p.sat / 100 * (1 + (p.vib - 50) / 100);
+        const lut = [0, 1, 2].map(c => Uint8ClampedArray.from({ length: 256 }, (_, i) => {
+            const y = ((Math.pow(i / 255, 1 / p.gam) - 0.5) * k + 0.5 + b) * tg[c];
+            return Math.round(Math.max(0, Math.min(1, y)) * 255);
+        }));
+        const d = src.data, o = dst.data;
+        for (let i = 0; i < d.length; i += 4) {
+            const l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+            for (let c = 0; c < 3; c++) o[i + c] = lut[c][Math.max(0, Math.min(255, Math.round(l + (d[i + c] - l) * sat)))];
+            o[i + 3] = 255;
+        }
+    }
+    function show(name) {
+        const p = PROFILES[name];
+        for (const b of box.querySelectorAll('.cmp-tabs button')) b.classList.toggle('active', b.dataset.p === name);
+        document.getElementById('cmp-note').textContent = `${name} preset: vibrance ${p.vib}%, saturation ${p.sat}%, brightness ${p.bri}%, contrast ${p.con}%, gamma ${p.gam.toFixed(2)}, ${p.temp === 0 ? 'neutral' : p.temp < 0 ? 'cooler' : 'warmer'}. Make your own in the app.`;
+        const draw = img => {
+            const w = Math.min(1600, img.naturalWidth), h = Math.round(w * img.naturalHeight / img.naturalWidth);
+            for (const c of [before, after]) { c.width = w; c.height = h; }
+            const bx = before.getContext('2d', { willReadFrequently: true });
+            bx.drawImage(img, 0, 0, w, h);
+            const src = bx.getImageData(0, 0, w, h), out = after.getContext('2d').createImageData(w, h);
+            grade(p, src, out);
+            after.getContext('2d').putImageData(out, 0, 0);
+            view.style.aspectRatio = `${w} / ${h}`;
+        };
+        if (cache[p.img]) return draw(cache[p.img]);
+        const img = new Image();
+        img.onload = () => { cache[p.img] = img; draw(img); };
+        img.src = p.img;
+    }
+    const range = box.querySelector('.cmp-range');
+    range.oninput = () => view.style.setProperty('--pos', `${range.value}%`);
+    for (const b of box.querySelectorAll('.cmp-tabs button')) b.onclick = () => show(b.dataset.p);
+    const probe = new Image();
+    probe.onload = () => { box.hidden = false; document.getElementById('compare-fallback').remove(); show('Night'); };
+    probe.src = PROFILES.Night.img;
+})();
+
 const DOWNLOAD_URL = '';
 const BUY_URL = '';
 const PRICE = '';
