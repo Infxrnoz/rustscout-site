@@ -78,6 +78,7 @@ nav .links a:hover { color: var(--text); }
 .show p { color: var(--muted); margin: 0 0 12px; }
 .show ul { margin: 0; padding-left: 18px; color: var(--muted); }
 .show img { border-radius: 10px; border: 1px solid var(--line-2); box-shadow: 0 20px 50px rgba(0, 0, 0, .5); }
+.cmds code.pro-cmd { color: #fff; border-color: var(--accent); background: rgba(224, 68, 47, .15); }
 .pro-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 4px; background: var(--accent); color: #fff; font: 700 12px var(--display); letter-spacing: .1em; vertical-align: middle; }
 
 .cmds { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
@@ -171,7 +172,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
             <a class="btn primary" data-download href="#download">Download free</a>
             <a class="btn ghost" href="#pricing">See Pro</a>
         </div>
-        <p class="note">Windows 10 and 11 · The core app is free</p>
+        <p class="note">Windows 10 and 11 · Everything from Rust+ is free</p>
         <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="assets/map.webp" width="1424" height="861" alt="RustScout showing a server's map with the server browser open"></div>
     </div>
 </header>
@@ -182,21 +183,21 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
         <h2>Built for <em>wipe day</em></h2>
         <p class="lead">Pair a server once in game and RustScout picks it up automatically.</p>
         <div class="grid">
-            <div class="card"><div class="ico">🗺</div><h3>Live map</h3><p>Your team, monuments, ore and resource spots, team map notes and your own pins on one zoomable map.</p></div>
-            <div class="card"><div class="ico">🚨</div><h3>Alerts</h3><p>Smart alarms, teammate deaths, who killed you, low TC upkeep, decay timers and tracked players coming online.</p></div>
-            <div class="card"><div class="ico">👥</div><h3>Team tracker</h3><p>See who's online, who died and where, and keep an eye on tracked players.</p></div>
-            <div class="card"><div class="ico">💀</div><h3>Threats</h3><p>Who keeps killing you, ranked, so you know which group to watch out for.</p></div>
-            <div class="card"><div class="ico">💬</div><h3>Discord</h3><p>Send alerts to a Discord channel, or run a Discord bot your team can ask questions.</p></div>
-            <div class="card"><div class="ico">🔎</div><h3>Server browser</h3><p>Population, wipe dates and a full map preview of any server before you join.</p></div>
-            <div class="card"><div class="ico">⏱</div><h3>Pins and decay timers</h3><p>Mark your base and stashes, and get warned before your walls start decaying.</p></div>
-            <div class="card"><div class="ico">🧮</div><h3>Calculators</h3><p>Raid costs, crafting, recycling, power circuits and gene breeding.</p></div>
-            <div class="card"><div class="ico">📂</div><h3>Map files</h3><p>Open any .map file to see monuments, recyclers, ore and junkpile hotspots before you play.</p></div>
+            <div class="card"><div class="ico">🗺</div><h3>Live map</h3><p>Your team, monuments, team map notes and where teammates died, live on one zoomable map.</p></div>
+            <div class="card"><div class="ico">🚨</div><h3>Alerts</h3><p>Smart alarms, teammate deaths and logins, who killed you and low TC upkeep, straight from Rust+.</p></div>
+            <div class="card"><div class="ico">👥</div><h3>Team and devices</h3><p>See who's online and who died where, chat with your team, and flip smart switches.</p></div>
+            <div class="card"><div class="ico">💀</div><h3>Threats</h3><p>Who keeps killing you, ranked. Pro adds their account age, hours, past names and bans.</p></div>
+            <div class="card"><div class="ico">💬</div><h3>Discord <span class="pro-tag">PRO</span></h3><p>Send alerts to a Discord channel, or run a Discord bot your team can ask questions.</p></div>
+            <div class="card"><div class="ico">🔎</div><h3>Server browser <span class="pro-tag">PRO</span></h3><p>Population, wipe dates and a full map preview of any server before you join.</p></div>
+            <div class="card"><div class="ico">⏱</div><h3>Pins and decay timers <span class="pro-tag">PRO</span></h3><p>Mark your base and stashes, and get warned before your walls start decaying.</p></div>
+            <div class="card"><div class="ico">🧮</div><h3>Calculators <span class="pro-tag">PRO</span></h3><p>Raid costs, crafting, recycling, power circuits and gene breeding.</p></div>
+            <div class="card"><div class="ico">📂</div><h3>Map files <span class="pro-tag">PRO</span></h3><p>Open any .map file to see monuments, recyclers, ore and junkpile hotspots before you play.</p></div>
         </div>
 
         <div class="show">
             <div class="text">
                 <div class="kicker">Raid planning</div>
-                <h3>Know the cost before you raid</h3>
+                <h3>Know the cost before you raid <span class="pro-tag">PRO</span></h3>
                 <p>Add walls, doors and deployables, and RustScout works out the cheapest or meta way through, with total sulfur and time to break.</p>
                 <p>Send the plan straight to team chat with one click.</p>
             </div>
@@ -253,7 +254,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
     <div class="wrap">
         <div class="kicker">Team chat bot</div>
         <h2>Ask from <em>in game</em></h2>
-        <p class="lead">Type a command in team chat and RustScout answers for the whole team.</p>
+        <p class="lead">Type a command in team chat and RustScout answers for the whole team. Commands marked orange need Pro.</p>
         <div class="chat">
             <div><span class="team">[TEAM] You:</span> !decay metal wall 400</div>
             <div><span class="bot">[TEAM] RustScout:</span> Metal Wall at 400/1000 HP falls in 3h 12m · pinned at K9</div>
@@ -261,8 +262,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
             <div><span class="bot">[TEAM] RustScout:</span> 3x Stone Wall: 6 C4 (13200), 555 Explo (13875), 30 Satchel Charge (14400), 138 Beancan Grenade (16560)</div>
         </div>
         <div class="cmds">
-            <code>!pop</code><code>!wipe</code><code>!time</code><code>!online</code><code>!offline</code><code>!decay</code><code>!decaylist</code><code>!cleardecay</code>
-            <code>!raid</code><code>!craft</code><code>!recycle</code><code>!upkeep</code><code>!alarms</code><code>!sw</code>
+            <code>!pop</code><code>!wipe</code><code>!time</code><code>!online</code><code>!offline</code><code class="pro-cmd">!decay</code><code class="pro-cmd">!decaylist</code><code class="pro-cmd">!cleardecay</code>
+            <code class="pro-cmd">!raid</code><code class="pro-cmd">!craft</code><code class="pro-cmd">!recycle</code><code>!upkeep</code><code>!alarms</code><code>!sw</code>
         </div>
     </div>
 </section>
@@ -276,11 +277,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
                 <h3>Free</h3>
                 <div class="price">$0</div>
                 <ul>
-                    <li>Live map, team and tracked players</li>
-                    <li>All alerts, in the app and on Discord</li>
-                    <li>Team chat and Discord bot commands</li>
-                    <li>Threats, server browser and map files</li>
-                    <li>Pins, decay timers and every calculator</li>
+                    <li>Live map with your team</li>
+                    <li>Team tracker, team chat and smart devices</li>
+                    <li>Rust+ alerts: alarms, deaths, logins, TC upkeep</li>
+                    <li>Who killed you, ranked</li>
+                    <li>Team chat commands like !pop, !time and !online</li>
                 </ul>
                 <a class="btn ghost" data-download href="#download" style="width:100%">Download</a>
             </div>
@@ -289,6 +290,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
                 <div class="price"><span data-price></span> <small>one-time</small></div>
                 <ul>
                     <li>Everything in Free</li>
+                    <li>Raid, crafting, recycling, power and gene calculators</li>
+                    <li>Decay timers and map pins</li>
+                    <li>Server browser, map files and heatmaps</li>
+                    <li>Tracked players and killer stats</li>
+                    <li>Discord alerts and Discord bot</li>
                     <li>In-game HUD and app over the game</li>
                     <li>Custom crosshair</li>
                     <li>Your own colour profiles, switched with a hotkey</li>
