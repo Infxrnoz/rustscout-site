@@ -167,8 +167,8 @@ footer p { margin: 0 0 8px; }
         <h2>Built for <em>wipe day</em></h2>
         <p class="lead">Pair a server once in game and RustScout picks it up automatically.</p>
         <div class="grid">
-            <div class="card"><div class="ico">🗺</div><h3>Live map</h3><p>Your team, vending machines, monuments, ore and resource spots on one zoomable map.</p></div>
-            <div class="card"><div class="ico">🚨</div><h3>Alerts</h3><p>Explosions, cargo, heli, Chinook, locked crates, oil rigs, smart alarms, teammate deaths and low TC upkeep.</p></div>
+            <div class="card"><div class="ico">🗺</div><h3>Live map</h3><p>Your team, monuments, ore and resource spots, team map notes and your own pins on one zoomable map.</p></div>
+            <div class="card"><div class="ico">🚨</div><h3>Alerts</h3><p>Smart alarms, teammate deaths, who killed you, low TC upkeep, decay timers and tracked players coming online.</p></div>
             <div class="card"><div class="ico">👥</div><h3>Team tracker</h3><p>See who's online, who died and where, and keep an eye on tracked players.</p></div>
             <div class="card"><div class="ico">💀</div><h3>Threats</h3><p>Who keeps killing you, ranked, so you know which group to watch out for.</p></div>
             <div class="card"><div class="ico">💬</div><h3>Discord</h3><p>Send alerts to a Discord channel, or run a Discord bot your team can ask questions.</p></div>
@@ -229,15 +229,14 @@ footer p { margin: 0 0 8px; }
         <h2>Ask from <em>in game</em></h2>
         <p class="lead">Type a command in team chat and RustScout answers for the whole team.</p>
         <div class="chat">
-            <div><span class="team">[TEAM] You:</span> !crate</div>
-            <div><span class="bot">[TEAM] RustScout:</span> Locked Crates: 2 on the map: 1 at Large Oil Rig (C1), 1 at Water Treatment (N20); newest arrived 5m ago</div>
-            <div><span class="team">[TEAM] You:</span> !large</div>
-            <div><span class="bot">[TEAM] RustScout:</span> Large Oil Rig (C1): heavies called 5m ago, crate unlocks in 10m</div>
+            <div><span class="team">[TEAM] You:</span> !decay metal wall 400</div>
+            <div><span class="bot">[TEAM] RustScout:</span> Metal Wall at 400/1000 HP falls in 3h 12m · pinned at K9</div>
+            <div><span class="team">[TEAM] You:</span> !raid stone wall 3</div>
+            <div><span class="bot">[TEAM] RustScout:</span> 3x Stone Wall: 6 C4 (13200), 555 Explo (13875), 30 Satchel Charge (14400), 138 Beancan Grenade (16560)</div>
         </div>
         <div class="cmds">
-            <code>!pop</code><code>!wipe</code><code>!time</code><code>!online</code><code>!offline</code><code>!events</code><code>!cargo</code><code>!heli</code>
-            <code>!chinook</code><code>!vendor</code><code>!crate</code><code>!oil</code><code>!small</code><code>!large</code><code>!airdrop</code><code>!craft</code>
-            <code>!recycle</code><code>!decay</code><code>!decaylist</code><code>!cleardecay</code><code>!raid</code><code>!shop</code><code>!sulfur</code><code>!upkeep</code><code>!alarms</code><code>!sw</code>
+            <code>!pop</code><code>!wipe</code><code>!time</code><code>!online</code><code>!offline</code><code>!decay</code><code>!decaylist</code><code>!cleardecay</code>
+            <code>!raid</code><code>!craft</code><code>!recycle</code><code>!upkeep</code><code>!alarms</code><code>!sw</code>
         </div>
     </div>
 </section>
@@ -306,6 +305,7 @@ footer p { margin: 0 0 8px; }
             <details><summary>Does the overlay work in fullscreen?</summary><p>Use Borderless or Windowed mode in Rust's settings. Exclusive fullscreen draws over everything, including overlays.</p></details>
             <details><summary>How many PCs can I use Pro on?</summary><p>Your key is for you. Use it on your own PCs, and don't share it.</p></details>
             <details><summary>I lost my licence key</summary><p>Message us with the email you paid with and we'll send it again.</p></details>
+            <details><summary>Where are shops, heli, cargo and other events?</summary><p>On 6 August 2026 Facepunch removed shops (vending machines) and map events (patrol heli, cargo ship, Chinook, locked crates, explosions, the travelling vendor, oil rigs and airdrops) from Rust+. No companion app can see them anymore, so RustScout doesn't have shop search, sulfur tracking, event timers, event alerts or the chat commands for them. If Facepunch brings that data back, those features come back too.</p></details>
             <details><summary>Mac or Linux?</summary><p>Windows only for now.</p></details>
         </div>
     </div>
