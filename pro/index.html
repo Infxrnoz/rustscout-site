@@ -10,7 +10,7 @@
 <meta property="og:image" content="https://rust-scout.app/assets/pro/threats.webp">
 <meta property="og:url" content="https://rust-scout.app/pro/">
 <meta name="theme-color" content="#0b0b0c">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" type="image/png" href="../assets/icon.png">
 <link rel="stylesheet" href="../assets/fonts.css">
@@ -190,6 +190,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
             <a class="on" href="./">Pro</a>
             <a href="#compare">Free vs Pro</a>
             <a href="../#faq">FAQ</a>
+            <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a>
         </div>
         <a class="btn primary small" data-buy href="#buy">Get Pro</a>
     </div>
@@ -380,7 +381,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
             <details><summary>How many PCs can I use it on?</summary><p>One at a time. Got a new PC? Click <b>Remove key</b> on the old one, then activate it on the new one.</p></details>
             <details><summary>Does it work offline?</summary><p>Yes. It needs internet once to activate, then Pro keeps working offline.</p></details>
             <details><summary>Can I get banned?</summary><p>RustScout doesn't read or change the game, but some servers have rules about overlays, crosshairs or colour changes. You use it at your own risk. See the <a href="../terms.html">terms</a>.</p></details>
-            <details><summary>What if it doesn't work for me?</summary><p>Message us within 14 days of buying for a full refund.</p></details>
+            <details><summary>What if it doesn't work for me?</summary><p>Open a ticket in our <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a> within 14 days of buying for a full refund.</p></details>
         </div>
     </div>
 </section>
@@ -399,22 +400,11 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 
 <footer>
     <div class="wrap">
-        <span>© <span data-year></span> RustScout · <a href="../terms.html">Terms and privacy</a></span>
+        <span>© <span data-year></span> RustScout · <a href="../terms.html">Terms and privacy</a> · <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a></span>
         <span>RustScout is a fan-made project and isn't affiliated with or endorsed by Facepunch Studios.</span>
     </div>
 </footer>
 
-<script>
-const BUY_URL = '';
-const PRICE = '';
-for (const a of document.querySelectorAll('[data-buy]')) {
-    if (BUY_URL) a.href = BUY_URL;
-    else { a.setAttribute('aria-disabled', 'true'); if (!a.querySelector('[data-price]')) a.textContent = 'Coming soon'; else a.textContent = 'Coming soon'; }
-}
-for (const el of document.querySelectorAll('[data-price]')) el.textContent = PRICE || 'Soon';
-for (const el of document.querySelectorAll('[data-year]')) el.textContent = new Date().getFullYear();
-const io = 'IntersectionObserver' in window && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
-for (const el of document.querySelectorAll('.reveal')) io ? io.observe(el) : el.classList.add('in');
-</script>
+<script src="../assets/pro.js"></script>
 </body>
 </html>

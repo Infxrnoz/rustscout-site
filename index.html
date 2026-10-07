@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://rust-scout.app/">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" type="image/png" href="assets/icon.png">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="stylesheet" href="assets/fonts.css">
 <style>
@@ -158,6 +158,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
             <a href="pro/">Pro</a>
             <a href="#setup">Setup</a>
             <a href="#faq">FAQ</a>
+            <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a>
         </div>
         <a class="btn primary small" data-download href="#download">Download</a>
     </div>
@@ -345,7 +346,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
             <details><summary>Why does it say "not answering Rust+"?</summary><p>That server's Rust+ is down or its Rust+ port is blocked. It's on the server's side, and RustScout reconnects by itself once it's back. Telling the server admins usually gets it fixed.</p></details>
             <details><summary>Does the overlay work in fullscreen?</summary><p>Use Borderless or Windowed mode in Rust's settings. Exclusive fullscreen draws over everything, including overlays.</p></details>
             <details><summary>How many PCs can I use Pro on?</summary><p>One at a time. Each key activates on one PC. Got a new PC? Click <b>Remove key</b> in the app on the old one, then activate it on the new one.</p></details>
-            <details><summary>I lost my licence key</summary><p>Message us with the email you paid with and we'll send it again.</p></details>
+            <details><summary>I lost my licence key</summary><p>Open a ticket in our <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a> with the email you paid with and we'll send it again.</p></details>
             <details><summary>Where are shops, heli, cargo and other events?</summary><p>On 6 August 2026 Facepunch removed shops (vending machines) and map events (patrol heli, cargo ship, Chinook, locked crates, explosions, the travelling vendor, oil rigs and airdrops) from Rust+. No companion app can see them anymore, so RustScout doesn't have shop search, sulfur tracking, event timers, event alerts or the chat commands for them. If Facepunch brings that data back, those features come back too.</p></details>
             <details><summary>Mac or Linux?</summary><p>Windows only for now.</p></details>
         </div>
@@ -360,8 +361,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
                 <p style="margin-top:12px">Rust+ on your desktop.</p>
             </div>
             <div>
+                <h4>Support</h4>
+                <p>Questions, bugs or ideas? Join the <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">RustScout Discord</a> and open a ticket.</p>
+            </div>
+            <div>
                 <h4>Purchases</h4>
-                <p>Pro is a one-time purchase for a licence key. If Pro doesn't work for you, message us within 14 days for a full refund.</p>
+                <p>Pro is a one-time purchase for a licence key. If Pro doesn't work for you, open a ticket in our <a href="https://discord.gg/n6wFxEGBqv" target="_blank" rel="noopener">Discord</a> within 14 days for a full refund.</p>
                 <p>Payments are handled by Stripe. <a href="terms.html">Terms and privacy</a></p>
             </div>
         </div>
@@ -369,72 +374,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
     </div>
 </footer>
 
-<script>
-const PROFILES = {
-    Night: { img: 'assets/cmp-night.webp', vib: 65, sat: 100, bri: 54, con: 50, gam: 1.6, temp: -10 },
-    Snow: { img: 'assets/cmp-snow.webp', vib: 60, sat: 105, bri: 46, con: 56, gam: 0.95, temp: 10 },
-    Desert: { img: 'assets/cmp-desert.webp', vib: 75, sat: 115, bri: 48, con: 55, gam: 1, temp: -15 }
-};
-(() => {
-    const box = document.getElementById('compare');
-    if (!box) return;
-    const view = box.querySelector('.cmp-view'), before = box.querySelector('.before'), after = box.querySelector('.after');
-    const cache = {};
-    function grade(p, src, dst) {
-        const t = p.temp / 100, tg = t >= 0 ? [1, 1 - 0.1 * t, 1 - 0.25 * t] : [1 + 0.25 * t, 1 + 0.1 * t, 1];
-        const k = 1 + (p.con - 50) / 100, b = (p.bri - 50) / 100, sat = p.sat / 100 * (1 + (p.vib - 50) / 100);
-        const lut = [0, 1, 2].map(c => Uint8ClampedArray.from({ length: 256 }, (_, i) => {
-            const y = ((Math.pow(i / 255, 1 / p.gam) - 0.5) * k + 0.5 + b) * tg[c];
-            return Math.round(Math.max(0, Math.min(1, y)) * 255);
-        }));
-        const d = src.data, o = dst.data;
-        for (let i = 0; i < d.length; i += 4) {
-            const l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
-            for (let c = 0; c < 3; c++) o[i + c] = lut[c][Math.max(0, Math.min(255, Math.round(l + (d[i + c] - l) * sat)))];
-            o[i + 3] = 255;
-        }
-    }
-    function show(name) {
-        const p = PROFILES[name];
-        for (const b of box.querySelectorAll('.cmp-tabs button')) b.classList.toggle('active', b.dataset.p === name);
-        document.getElementById('cmp-note').textContent = `${name} preset: vibrance ${p.vib}%, saturation ${p.sat}%, brightness ${p.bri}%, contrast ${p.con}%, gamma ${p.gam.toFixed(2)}, ${p.temp === 0 ? 'neutral' : p.temp < 0 ? 'cooler' : 'warmer'}. Make your own in the app.`;
-        const draw = img => {
-            const w = Math.min(1600, img.naturalWidth), h = Math.round(w * img.naturalHeight / img.naturalWidth);
-            for (const c of [before, after]) { c.width = w; c.height = h; }
-            const bx = before.getContext('2d', { willReadFrequently: true });
-            bx.drawImage(img, 0, 0, w, h);
-            const src = bx.getImageData(0, 0, w, h), out = after.getContext('2d').createImageData(w, h);
-            grade(p, src, out);
-            after.getContext('2d').putImageData(out, 0, 0);
-            view.style.aspectRatio = `${w} / ${h}`;
-        };
-        if (cache[p.img]) return draw(cache[p.img]);
-        const img = new Image();
-        img.onload = () => { cache[p.img] = img; draw(img); };
-        img.src = p.img;
-    }
-    const range = box.querySelector('.cmp-range');
-    range.oninput = () => view.style.setProperty('--pos', `${range.value}%`);
-    for (const b of box.querySelectorAll('.cmp-tabs button')) b.onclick = () => show(b.dataset.p);
-    const probe = new Image();
-    probe.onload = () => { box.hidden = false; document.getElementById('compare-fallback').remove(); show('Night'); };
-    probe.src = PROFILES.Night.img;
-})();
-
-const DOWNLOAD_URL = '';
-const BUY_URL = '';
-const PRICE = '';
-
-for (const a of document.querySelectorAll('[data-download]')) {
-    if (DOWNLOAD_URL) a.href = DOWNLOAD_URL;
-    else if (a.closest('.plan, .cta')) { a.textContent = 'Coming soon'; a.setAttribute('aria-disabled', 'true'); }
-}
-for (const a of document.querySelectorAll('[data-buy]')) {
-    if (BUY_URL) a.href = BUY_URL;
-    else { a.textContent = 'Coming soon'; a.setAttribute('aria-disabled', 'true'); }
-}
-for (const el of document.querySelectorAll('[data-price]')) el.textContent = PRICE || 'Soon';
-for (const el of document.querySelectorAll('[data-year]')) el.textContent = new Date().getFullYear();
-</script>
+<script src="assets/site.js"></script>
 </body>
 </html>
