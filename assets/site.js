@@ -49,7 +49,7 @@ const PROFILES = {
     probe.src = PROFILES.Night.img;
 })();
 
-const DOWNLOAD_URL = '';
+const DOWNLOAD_URL = 'https://github.com/Infxrnoz/rustscout-site/releases/latest/download/RustScout-Setup.exe';
 const BUY_URL = '';
 const PRICE = '';
 
